@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { User, Mail, Shield, Key, Save, Camera } from 'lucide-react';
+import { User, Mail, Shield, Key, Save, Camera, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../api/axios';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
 
 const Profile = () => {
     const { user, updateProfile } = useAuth();
@@ -36,84 +42,104 @@ const Profile = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-6xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div>
-                <h1 className="text-2xl font-bold text-slate-900">My Profile</h1>
-                <p className="text-slate-500">Manage your account settings and preferences</p>
+                <h1 className="text-3xl font-black text-slate-900 tracking-tight">Account Configuration</h1>
+                <p className="text-slate-500 font-medium">Manage your personal information and security settings</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="md:col-span-1">
-                    <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm text-center">
-                        <div className="relative inline-block mb-4">
-                            <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-blue-200">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
+                <div className="xl:col-span-1">
+                    <div className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 text-center relative overflow-hidden group">
+                        <div className="absolute top-0 left-0 w-full h-2 bg-blue-600" />
+                        <div className="relative inline-block mb-6">
+                            <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-blue-700 rounded-[2.5rem] flex items-center justify-center text-white text-5xl font-black shadow-2xl shadow-blue-200 rotate-3 group-hover:rotate-0 transition-transform duration-500">
                                 {user?.fullName?.charAt(0)}
                             </div>
-                            <button className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-md border border-slate-100 text-blue-600 hover:bg-slate-50 transition-all">
-                                <Camera size={16} />
+                            <button className="absolute -bottom-2 -right-2 p-3 bg-white rounded-2xl shadow-xl border border-slate-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300">
+                                <Camera size={20} />
                             </button>
                         </div>
-                        <h3 className="text-xl font-bold text-slate-900">{user?.fullName}</h3>
-                        <p className="text-slate-500 text-sm mb-4">{user?.email}</p>
-                        <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold uppercase tracking-wider">
-                            {user?.role}
-                        </span>
+                        <h3 className="text-2xl font-black text-slate-900 mb-1">{user?.fullName}</h3>
+                        <p className="text-slate-400 font-bold text-sm mb-6 uppercase tracking-widest">{user?.email}</p>
+                        
+                        <div className="flex items-center justify-center gap-2 mb-8">
+                            <span className="px-4 py-2 bg-blue-50 text-blue-700 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-sm">
+                                {user?.role}
+                            </span>
+                            <span className="px-4 py-2 bg-emerald-50 text-emerald-700 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-sm flex items-center gap-1">
+                                <Check size={12} /> Active
+                            </span>
+                        </div>
+
+                        <div className="pt-6 border-t border-slate-50 grid grid-cols-2 gap-4">
+                            <div className="text-center">
+                                <p className="text-xl font-black text-slate-900">12</p>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Actions Today</p>
+                            </div>
+                            <div className="text-center border-l border-slate-50">
+                                <p className="text-xl font-black text-slate-900">1.2k</p>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Total Tasks</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="md:col-span-2">
-                    <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-                        <div className="p-8 space-y-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                                        <User size={16} className="text-slate-400" />
+                <div className="xl:col-span-2">
+                    <form onSubmit={handleSubmit} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">
+                        <div className="p-8 md:p-12 space-y-10">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-3">
+                                    <label className="text-sm font-bold text-slate-700 flex items-center gap-2 ml-1">
+                                        <User size={16} className="text-blue-500" />
                                         Full Name
                                     </label>
                                     <input 
                                         type="text" 
-                                        className="input-field w-full"
+                                        className="w-full bg-slate-50 border-2 border-transparent rounded-2xl py-4 px-6 focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all font-semibold text-slate-700"
                                         value={formData.fullName}
                                         onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                <div className="space-y-3">
+                                    <label className="text-sm font-bold text-slate-700 flex items-center gap-2 ml-1">
                                         <Mail size={16} className="text-slate-400" />
                                         Email Address
                                     </label>
                                     <input 
                                         type="email" 
-                                        className="input-field w-full bg-slate-50 text-slate-500 cursor-not-allowed"
+                                        className="w-full bg-slate-100 border-2 border-transparent rounded-2xl py-4 px-6 text-slate-400 font-semibold cursor-not-allowed"
                                         value={formData.email}
                                         readOnly
                                     />
                                 </div>
                             </div>
 
-                            <hr className="border-slate-100" />
+                            <div className="h-px bg-slate-100 w-full" />
 
-                            <div className="space-y-4">
-                                <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                                    <Key size={18} className="text-blue-500" />
-                                    Change Password
+                            <div className="space-y-6">
+                                <h4 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                                        <Key size={18} />
+                                    </div>
+                                    Security Credentials
                                 </h4>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-slate-700">New Password</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-3">
+                                        <label className="text-sm font-bold text-slate-700 ml-1">New Password</label>
                                         <input 
                                             type="password" 
-                                            className="input-field w-full"
+                                            className="w-full bg-slate-50 border-2 border-transparent rounded-2xl py-4 px-6 focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all font-semibold text-slate-700"
                                             placeholder="••••••••"
                                             value={formData.password}
                                             onChange={(e) => setFormData({...formData, password: e.target.value})}
                                         />
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-slate-700">Confirm New Password</label>
+                                    <div className="space-y-3">
+                                        <label className="text-sm font-bold text-slate-700 ml-1">Confirm New Password</label>
                                         <input 
                                             type="password" 
-                                            className="input-field w-full"
+                                            className="w-full bg-slate-50 border-2 border-transparent rounded-2xl py-4 px-6 focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all font-semibold text-slate-700"
                                             placeholder="••••••••"
                                             value={formData.confirmPassword}
                                             onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
@@ -123,14 +149,20 @@ const Profile = () => {
                             </div>
                         </div>
 
-                        <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-end">
+                        <div className="p-8 md:p-10 bg-slate-50/50 border-t border-slate-100 flex flex-col sm:flex-row justify-end gap-4">
                             <button 
                                 type="submit" 
                                 disabled={loading}
-                                className="btn-primary flex items-center gap-2 px-8"
+                                className="w-full sm:w-auto px-12 py-4 rounded-2xl bg-blue-600 text-white font-black shadow-xl shadow-blue-100 hover:bg-blue-700 hover:shadow-2xl transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                             >
-                                <Save size={18} />
-                                {loading ? 'Saving Changes...' : 'Save Changes'}
+                                {loading ? (
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                ) : (
+                                    <>
+                                        <Save size={20} />
+                                        Update Profile
+                                    </>
+                                )}
                             </button>
                         </div>
                     </form>
@@ -141,3 +173,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

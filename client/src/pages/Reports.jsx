@@ -99,7 +99,7 @@ const Reports = () => {
                                 +14.5%
                             </div>
                         </div>
-                        <div className="h-[350px] w-full">
+                        <div style={{ width: '100%', height: 300 }}>
                             <ResponsiveContainer width="100%" height="100%">
                                 <LineChart data={chartData}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -117,7 +117,7 @@ const Reports = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                             <h3 className="text-lg font-bold text-slate-900 mb-6">Sales by Channel</h3>
-                            <div className="h-[250px]">
+                            <div style={{ width: '100%', height: 220 }}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={chartData}>
                                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -148,7 +148,7 @@ const Reports = () => {
                             <PieChartIcon size={20} className="text-emerald-600" />
                             Category Distribution
                         </h3>
-                        <div className="h-[300px]">
+                        <div style={{ width: '100%', height: 280 }}>
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie

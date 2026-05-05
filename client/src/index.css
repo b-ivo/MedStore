@@ -4,37 +4,67 @@
   --color-primary: #0f172a;
   --color-secondary: #334155;
   --color-accent: #3b82f6;
+  
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-body {
-  @apply bg-slate-50 text-slate-900 font-sans;
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-600;
+  }
 }
 
-.glass {
-  @apply bg-white/80 backdrop-blur-md border border-white/20;
+@layer components {
+  .glass {
+    @apply bg-white/80 backdrop-blur-md border border-white/20;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg shadow-blue-100 active:scale-95 disabled:opacity-50;
+  }
+
+  .input-field {
+    @apply bg-slate-50 border-2 border-transparent rounded-2xl py-3 px-5 focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all font-semibold text-slate-700;
+  }
 }
 
-.btn-primary {
-  @apply bg-accent hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-all shadow-md active:scale-95;
-}
-
-.input-field {
-  @apply bg-white border border-slate-200 rounded-lg py-2 px-4 focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all;
-}
-
-/* Custom scrollbar */
+/* Custom scrollbar for a premium look */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  @apply bg-slate-50;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full;
+  @apply bg-slate-200 border-4 border-slate-50 rounded-full hover:bg-slate-300 transition-colors;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400;
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+

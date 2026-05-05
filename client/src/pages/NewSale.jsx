@@ -95,7 +95,7 @@ const NewSale = () => {
     );
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
@@ -134,8 +134,8 @@ const NewSale = () => {
                 </div>
             </div>
 
-            <div className="space-y-6">
-                <div className="bg-white rounded-2xl border border-slate-100 shadow-lg overflow-hidden flex flex-col h-fit sticky top-24">
+            <div className="lg:col-span-1">
+                <div className="bg-white rounded-2xl border border-slate-100 shadow-lg overflow-hidden flex flex-col">
                     <div className="p-6 bg-slate-900 text-white flex items-center gap-3">
                         <ShoppingCart size={24} />
                         <h3 className="text-xl font-bold">Cart Summary</h3>
