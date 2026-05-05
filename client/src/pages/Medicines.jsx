@@ -19,8 +19,10 @@ const Medicines = () => {
     const query = searchParams.get('q') || '';
     
     const [medicines, setMedicines] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState(query);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const { user } = useAuth();
 
     useEffect(() => {
@@ -29,7 +31,17 @@ const Medicines = () => {
 
     useEffect(() => {
         fetchMedicines();
+        fetchCategories();
     }, []);
+
+    const fetchCategories = async () => {
+        try {
+            const { data } = await api.get('/categories');
+            setCategories(data);
+        } catch (error) {
+            console.error('Failed to fetch categories');
+        }
+    };
 
     const fetchMedicines = async () => {
         try {
@@ -68,10 +80,27 @@ const Medicines = () => {
         ), { duration: 6000 });
     };
 
-    const filteredMedicines = medicines.filter(m => 
-        m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        m.batchNumber.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredMedicines = medicines.filter(m => {
+        const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                             m.batchNumber.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = selectedCategory === '' || m.category?._id === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
+
+    const handleExport = () => {
+        const exportData = filteredMedicines.map(m => ({
+            Name: m.name,
+            Category: m.category?.name || 'Uncategorized',
+            BatchNumber: m.batchNumber,
+            Stock: m.stockQuantity,
+            Price: m.price,
+            ExpiryDate: new Date(m.expiryDate).toLocaleDateString(),
+            Supplier: m.supplier?.companyName || 'N/A'
+        }));
+        import('../utils/exportUtils').then(module => {
+            module.exportToCSV(exportData, 'MedStore_Inventory');
+        });
+    };
 
     return (
         <div className="space-y-6">
@@ -91,7 +120,6 @@ const Medicines = () => {
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 <div className="p-4 border-b border-slate-100 flex flex-col md:flex-row gap-4 items-center justify-between">
                     <div className="relative w-full md:w-96">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                         <input 
                             type="text" 
                             placeholder="Search by name or batch number..." 
@@ -101,11 +129,22 @@ const Medicines = () => {
                         />
                     </div>
                     <div className="flex items-center gap-3 w-full md:w-auto">
-                        <button className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-600 rounded-lg hover:bg-slate-100 transition-all font-medium border border-slate-200">
-                            <Filter size={18} />
-                            Filter
-                        </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-600 rounded-lg hover:bg-slate-100 transition-all font-medium border border-slate-200">
+                        <div className="relative">
+                            <select 
+                                className="input-field pl-10 appearance-none bg-slate-50 border-slate-200"
+                                value={selectedCategory}
+                                onChange={(e) => setSelectedCategory(e.target.value)}
+                            >
+                                <option value="">All Categories</option>
+                                {categories.map(cat => (
+                                    <option key={cat._id} value={cat._id}>{cat.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <button 
+                            onClick={handleExport}
+                            className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium border border-slate-900"
+                        >
                             <Download size={18} />
                             Export
                         </button>

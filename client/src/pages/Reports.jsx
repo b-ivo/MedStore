@@ -36,6 +36,18 @@ const Reports = () => {
         }
     };
 
+    const handleDownload = () => {
+        const exportData = salesData.map(s => ({
+            Date: new Date(s.saleDate).toLocaleDateString(),
+            OrderID: s._id,
+            TotalAmount: s.totalAmount,
+            Pharmacist: s.processedBy?.fullName || 'N/A'
+        }));
+        import('../utils/exportUtils').then(module => {
+            module.exportToCSV(exportData, 'MedStore_Analytics_Report');
+        });
+    };
+
     // Transform sales data for charts
     const salesByDay = salesData.reduce((acc, sale) => {
         const date = new Date(sale.saleDate).toLocaleDateString('en-US', { weekday: 'short' });
@@ -64,7 +76,10 @@ const Reports = () => {
                         <Calendar size={18} />
                         Last 30 Days
                     </button>
-                    <button className="btn-primary flex items-center gap-2">
+                    <button 
+                        onClick={handleDownload}
+                        className="btn-primary flex items-center gap-2"
+                    >
                         <Download size={18} />
                         Download Report
                     </button>

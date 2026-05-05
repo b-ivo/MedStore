@@ -8,8 +8,14 @@ import {
     Calendar,
     ArrowUpRight,
     ArrowDownRight,
-    ShoppingCart
+    ShoppingCart,
+    ArrowRight,
+    PlusCircle,
+    UserPlus,
+    History
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { 
     AreaChart, 
     Area, 
@@ -41,6 +47,7 @@ const StatCard = ({ title, value, icon: Icon, color, trend, trendValue }) => (
 );
 
 const Dashboard = () => {
+    const { user } = useAuth();
     const [summary, setSummary] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -73,9 +80,23 @@ const Dashboard = () => {
 
     return (
         <div className="space-y-8">
-            <div>
-                <h1 className="text-2xl font-bold text-slate-900">System Dashboard</h1>
-                <p className="text-slate-500">Real-time overview of your pharmacy operations</p>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-slate-900">System Dashboard</h1>
+                    <p className="text-slate-500">Real-time overview of your pharmacy operations</p>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Link to="/sales/new" className="btn-primary flex items-center gap-2 py-2 px-4 text-sm">
+                        <PlusCircle size={18} />
+                        New Sale
+                    </Link>
+                    {user?.role === 'Admin' && (
+                        <Link to="/medicines/add" className="bg-slate-900 text-white hover:bg-slate-800 flex items-center gap-2 py-2 px-4 rounded-xl text-sm font-semibold transition-all">
+                            <PlusCircle size={18} />
+                            Add Medicine
+                        </Link>
+                    )}
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -156,6 +177,84 @@ const Dashboard = () => {
                                 <Bar dataKey="sales" fill="#10b981" radius={[4, 4, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Low Stock Alerts */}
+                <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                    <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+                        <h3 className="font-bold text-slate-900 flex items-center gap-2">
+                            <AlertTriangle size={18} className="text-amber-500" />
+                            Low Stock Inventory
+                        </h3>
+                        <Link to="/medicines" className="text-xs font-semibold text-blue-600 hover:underline">View All</Link>
+                    </div>
+                    <div className="p-0">
+                        <table className="w-full text-left border-collapse">
+                            <thead className="bg-slate-50/50">
+                                <tr>
+                                    <th className="px-5 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Medicine</th>
+                                    <th className="px-5 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Stock</th>
+                                    <th className="px-5 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-50">
+                                {summary?.criticalAlerts?.lowStock?.map(med => (
+                                    <tr key={med._id} className="hover:bg-slate-50/30 transition-colors">
+                                        <td className="px-5 py-3 text-sm font-medium text-slate-700">{med.name}</td>
+                                        <td className="px-5 py-3 text-sm text-slate-600">{med.stockQuantity} units</td>
+                                        <td className="px-5 py-3 text-right">
+                                            <span className="px-2 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold rounded-md uppercase">Critical</span>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {(!summary?.criticalAlerts?.lowStock || summary.criticalAlerts.lowStock.length === 0) && (
+                                    <tr>
+                                        <td colSpan="3" className="px-5 py-8 text-center text-slate-400 text-sm italic">No low stock items</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Expiring Soon */}
+                <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                    <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+                        <h3 className="font-bold text-slate-900 flex items-center gap-2">
+                            <Calendar size={18} className="text-rose-500" />
+                            Expiring Soon
+                        </h3>
+                        <Link to="/medicines" className="text-xs font-semibold text-blue-600 hover:underline">Manage Stock</Link>
+                    </div>
+                    <div className="p-0">
+                        <table className="w-full text-left border-collapse">
+                            <thead className="bg-slate-50/50">
+                                <tr>
+                                    <th className="px-5 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Medicine</th>
+                                    <th className="px-5 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right">Expiry Date</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-50">
+                                {summary?.criticalAlerts?.expiring?.map(med => (
+                                    <tr key={med._id} className="hover:bg-slate-50/30 transition-colors">
+                                        <td className="px-5 py-3 text-sm font-medium text-slate-700">{med.name}</td>
+                                        <td className="px-5 py-3 text-right">
+                                            <span className={`px-2 py-1 ${new Date(med.expiryDate) < new Date() ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-700'} text-[10px] font-bold rounded-md uppercase`}>
+                                                {new Date(med.expiryDate).toLocaleDateString()}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {(!summary?.criticalAlerts?.expiring || summary.criticalAlerts.expiring.length === 0) && (
+                                    <tr>
+                                        <td colSpan="2" className="px-5 py-8 text-center text-slate-400 text-sm italic">No near-expiry items</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
