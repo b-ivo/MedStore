@@ -108,7 +108,7 @@ const Users = () => {
                     <tbody className="divide-y divide-slate-100">
                         {loading ? (
                             <tr><td colSpan="5" className="px-6 py-12 text-center text-slate-500">Loading staff...</td></tr>
-                        ) : users.map((u) => (
+                        ) : users.filter(u => u.role !== 'Admin').map((u) => (
                             <tr key={u._id} className="hover:bg-slate-50/50 transition-colors group">
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">
@@ -133,10 +133,10 @@ const Users = () => {
                                 </td>
                                 <td className="px-6 py-4 text-right">
                                     <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button onClick={() => handleEdit(u)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+                                        <button onClick={() => handleEdit(u)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Edit Employee">
                                             <Edit size={18} />
                                         </button>
-                                        <button onClick={() => handleDelete(u._id)} className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg">
+                                        <button onClick={() => handleDelete(u._id)} className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg" title="Delete Employee">
                                             <Trash2 size={18} />
                                         </button>
                                     </div>
@@ -180,7 +180,7 @@ const Users = () => {
                                     value={currentUser.role}
                                     onChange={(e) => setCurrentUser({...currentUser, role: e.target.value})}
                                 >
-                                    <option value="Admin">Admin</option>
+
                                     <option value="Pharmacist">Pharmacist</option>
                                     <option value="Inventory Manager">Inventory Manager</option>
                                 </select>

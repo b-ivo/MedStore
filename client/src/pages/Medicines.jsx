@@ -24,17 +24,22 @@ function cn(...inputs) {
 const Medicines = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
+  const categoryParam = searchParams.get("category") || "";
 
   const [medicines, setMedicines] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(query);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(categoryParam);
   const { user } = useAuth();
 
   useEffect(() => {
     setSearchTerm(query);
   }, [query]);
+
+  useEffect(() => {
+    setSelectedCategory(categoryParam);
+  }, [categoryParam]);
 
   useEffect(() => {
     fetchMedicines();

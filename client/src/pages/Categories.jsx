@@ -3,6 +3,7 @@ import api from '../api/axios';
 import { Plus, Edit, Trash2, Tag, X, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
@@ -11,6 +12,7 @@ const Categories = () => {
     const [currentCategory, setCurrentCategory] = useState({ name: '', description: '' });
     const [editId, setEditId] = useState(null);
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchCategories();
@@ -91,16 +93,32 @@ const Categories = () => {
                     <p className="col-span-full text-center py-12 text-slate-500">No categories found</p>
                 ) : (
                     categories.map((cat) => (
-                        <div key={cat._id} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all group">
+                        <div 
+                            key={cat._id} 
+                            onClick={() => navigate(`/medicines?category=${cat._id}`)}
+                            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-pointer hover:border-blue-200"
+                        >
                             <div className="flex items-start justify-between mb-4">
                                 <div className="p-3 rounded-xl bg-blue-50 text-blue-600">
                                     <Tag size={24} />
                                 </div>
                                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button onClick={() => handleEdit(cat)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                    <button 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleEdit(cat);
+                                        }} 
+                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                    >
                                         <Edit size={16} />
                                     </button>
-                                    <button onClick={() => handleDelete(cat._id)} className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
+                                    <button 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDelete(cat._id);
+                                        }} 
+                                        className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                                    >
                                         <Trash2 size={16} />
                                     </button>
                                 </div>

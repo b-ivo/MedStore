@@ -40,7 +40,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     const menuItems = [
         { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard',        roles: ['Admin', 'Pharmacist', 'Inventory Manager'] },
         { to: '/medicines', icon: Pill,            label: 'Medicines',         roles: ['Admin', 'Pharmacist', 'Inventory Manager'] },
-        { to: '/categories',icon: Tags,            label: 'Categories',        roles: ['Admin', 'Inventory Manager'] },
+        { to: '/categories',icon: Tags,            label: 'Categories',        roles: ['Admin', 'Inventory Manager', 'Pharmacist'] },
         { to: '/suppliers',  icon: Truck,           label: 'Suppliers',         roles: ['Admin', 'Inventory Manager'] },
         { to: '/purchases',  icon: ShoppingCart,    label: 'Purchases',         roles: ['Admin', 'Inventory Manager'] },
         { to: '/sales',      icon: ClipboardList,   label: 'Sales',             roles: ['Admin', 'Pharmacist'] },
