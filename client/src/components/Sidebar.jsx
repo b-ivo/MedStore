@@ -70,8 +70,8 @@ const Sidebar = ({ isOpen, onClose }) => {
             )}>
                 <div className="p-8 flex items-center justify-between">
                     <h1 className="text-2xl font-black text-blue-600 flex items-center gap-3 tracking-tighter">
-                        <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100">
-                            <Pill size={24} />
+                        <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-100 overflow-hidden">
+                            <img src="/favicon.png" alt="Logo" className="w-full h-full object-cover" />
                         </div>
                         <span>MedStore</span>
                     </h1>

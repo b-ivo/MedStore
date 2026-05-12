@@ -18,7 +18,7 @@ const DashboardLayout = () => {
                 <Navbar onMenuClick={() => setSidebarOpen(true)} />
                 
                 <main className="flex-1 overflow-y-auto p-4 md:p-8 lg:p-10 scroll-smooth">
-                    <div className="max-w-7xl mx-auto">
+                    <div className="max-w-7xl mx-auto animate-fade-in">
                         <Outlet />
                     </div>
                 </main>

@@ -1,0 +1,17 @@
+{
+  "name": "MedStore Pharmacy Management System",
+  "short_name": "MedStore",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "description": "Professional pharmacy inventory management: track medicines, sales, purchases, and suppliers.",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

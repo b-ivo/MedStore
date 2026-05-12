@@ -34,8 +34,8 @@ const Register = () => {
             <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
                 <div className="p-8">
                     <div className="flex justify-center mb-6">
-                        <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
-                            <Pill size={28} />
+                        <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center p-0 shadow-2xl shadow-blue-200 group overflow-hidden">
+                            <img src="/favicon.png" alt="MedStore Logo" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                         </div>
                     </div>
                     
